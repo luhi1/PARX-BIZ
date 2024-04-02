@@ -1,12 +1,6 @@
 package main
 
-import (
-	"fmt"
-	"net/http"
-	"strconv"
-	"strings"
-)
-
+/*
 // EventInfo @TODO: Figure out how to pass a file -> struct -> SQL
 type StudentAttendance struct {
 	StudentName   string
@@ -230,3 +224,5 @@ func (e *EventInfo) createEvent(writer http.ResponseWriter, request *http.Reques
 	}
 	http.Redirect(writer, request, "../teacherEvents", 307)
 }
+
+*/

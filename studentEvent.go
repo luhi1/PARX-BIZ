@@ -1,5 +1,6 @@
 package main
 
+/*
 import (
 	"fmt"
 	"net/http"
@@ -96,3 +97,5 @@ func (se *studentEventInfo) studentSignupEventHandler(writer http.ResponseWriter
 	fmt.Println(addition.RowsAffected())
 	http.Redirect(writer, request, "./studentEvents", 307)
 }
+
+*/

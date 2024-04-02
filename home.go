@@ -1,5 +1,6 @@
 package main
 
+/*
 import (
 	"fmt"
 	"html/template"
@@ -55,7 +56,6 @@ func (h *HomeData) GETStudentHandler(writer http.ResponseWriter, request *http.R
 		}
 	}
 
-	fmt.Println(h.U.Name)
 	err = tplExec(writer, "home.gohtml", *h)
 	//@TODO: REMOVE
 	if err != nil {
@@ -74,3 +74,4 @@ func multiTplExec(w http.ResponseWriter, filename string, information any, filen
 	}
 	return nil
 }
+*/

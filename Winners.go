@@ -1,11 +1,11 @@
 package main
 
+/*
 import (
 	"fmt"
 	"net/http"
 	"strconv"
 )
-
 // EventInfo @TODO: Figure out how to pass a file -> struct -> SQL
 type Winners struct {
 	RandomNinthWinner    string
@@ -124,3 +124,4 @@ func (w *Winners) report(writer http.ResponseWriter, request *http.Request) {
 	}
 	tplExec(writer, "report.gohtml", w)
 }
+*/

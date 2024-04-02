@@ -1,5 +1,6 @@
 package main
 
+/*
 import (
 	"fmt"
 	"net/http"
@@ -101,3 +102,4 @@ func (p *Prize) createPrize(writer http.ResponseWriter, request *http.Request) {
 	}
 	http.Redirect(writer, request, "./prizes", 307)
 }
+*/

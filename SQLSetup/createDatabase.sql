@@ -31,7 +31,7 @@ CREATE TABLE `Users`
 );
 insert into users(id, username, `password`, real_name, program_area)
 values
-    (1, 'test', 'test', 'test', 1);
+    (1, 'test', 'n4bQgYhMfWWaL-qgxVrQFaO_TxsrC4Is0V1sFbDwCgg=', 'test', 1);
 
 
 
@@ -96,3 +96,4 @@ select Resources.info, Representatives.name, Representatives.email,
        from Resources join Partners on Resources.partner = Partners.id
                         join Representatives on Partners.representative = Representatives.id
                         join Partner_Types on Partners.type = Partner_Types.id;
+select users.id, users.real_name, Program_Areas.name from users join program_areas on users.program_area = program_areas.id where users.username = 'test' && users.password = 'n4bQgYhMfWWaL-qgxVrQFaO_TxsrC4Is0V1sFbDwCgg='
