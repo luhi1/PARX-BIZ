@@ -27,6 +27,7 @@ var db *sql.DB
 // Start server run, files, and other shit.
 func main() {
 	userInfo := UserData{}
+	partnerInfo := PartnerInfo{}
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
@@ -40,9 +41,9 @@ func main() {
 		userInfo = UserData{}
 		http.Redirect(writer, request, "./login", 307)
 	})
-	/*
-		http.HandleFunc("/teacherEvents", eventInfo.GETHandler)
 
+	http.HandleFunc("/teacherPartners", partnerInfo.GETHandler)
+	/*
 		http.HandleFunc("/teacherCreateEvent", eventInfo.POSTHandler)
 
 		http.HandleFunc("/winners", winners.GETHandler)
@@ -61,7 +62,7 @@ func main() {
 		http.HandleFunc("/studentSignupEvent", studentEventInformation.studentSignupEventHandler)
 
 		http.HandleFunc("/qna", func(writer http.ResponseWriter, request *http.Request) {
-			multiTplExec(writer, "qna.gohtml", nil, "home.gohtml")
+			multiTplExec(writer, "qna.gohtml", nil, "teacher_partners.gohtml")
 		})
 		http.HandleFunc("/bugs", func(writer http.ResponseWriter, request *http.Request) {
 			request.ParseForm()

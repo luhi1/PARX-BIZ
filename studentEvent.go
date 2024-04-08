@@ -46,7 +46,7 @@ func (se *studentEventInfo) GETStudentHandler(writer http.ResponseWriter, reques
 			events = append(events, *se)
 		}
 	}
-	err = multiTplExec(writer, "studentEvents.gohtml", events, "home.gohtml")
+	err = multiTplExec(writer, "studentEvents.gohtml", events, "teacher_partners.gohtml")
 	//@TODO: REMOVE
 	if err != nil {
 		return

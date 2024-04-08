@@ -56,7 +56,7 @@ func (h *HomeData) GETStudentHandler(writer http.ResponseWriter, request *http.R
 		}
 	}
 
-	err = tplExec(writer, "home.gohtml", *h)
+	err = tplExec(writer, "teacher_partners.gohtml", *h)
 	//@TODO: REMOVE
 	if err != nil {
 		return

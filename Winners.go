@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 )
-// EventInfo @TODO: Figure out how to pass a file -> struct -> SQL
+// PartnerInfo @TODO: Figure out how to pass a file -> struct -> SQL
 type Winners struct {
 	RandomNinthWinner    string
 	RandomTenthWinner    string
