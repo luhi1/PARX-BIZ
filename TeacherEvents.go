@@ -18,7 +18,7 @@ type PartnerInfo struct {
 func (p *PartnerInfo) GETHandler(writer http.ResponseWriter, request *http.Request) {
 	partners := []PartnerInfo{}
 
-	rows, err := db.Query("select Partners.id, Partners.name, Representatives.email, Representatives.phone, Partner_Types.name, partners.active from Partners join partner_types on partners.type = partner_types.id join Representatives on Partners.representative = Representatives.id")
+	rows, err := db.Query("select Partners.id, Partners.name, Representatives.email, Representatives.phone, Partner_Types.name, Partners.active from Partners join Partner_Types on Partners.type = Partner_Types.id join Representatives on Partners.representative = Representatives.id")
 
 	if err != nil {
 		fmt.Println(err)
@@ -31,7 +31,7 @@ func (p *PartnerInfo) GETHandler(writer http.ResponseWriter, request *http.Reque
 			continue
 		}
 
-		rowResources, err := db.Query("select Resources.info from Resources where resources.partner = ?", p.ID)
+		rowResources, err := db.Query("select Resources.info from Resources where Resources.partner = ?", p.ID)
 		if err != nil {
 			fmt.Println(err)
 			return

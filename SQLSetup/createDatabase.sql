@@ -1,3 +1,4 @@
+-- Active: 1712548880115@@127.0.0.1@3306@fblacnp
 DROP SCHEMA `fblacnp`;
 CREATE SCHEMA `fblacnp`;
 use fblacnp;
@@ -29,7 +30,7 @@ CREATE TABLE `Users`
     PRIMARY KEY (`id`),
     FOREIGN KEY (program_area) references Program_Areas(id)
 );
-insert into users(id, username, `password`, real_name, program_area)
+insert into Users(id, username, `password`, real_name, program_area)
 values
     (1, 'test', 'n4bQgYhMfWWaL-qgxVrQFaO_TxsrC4Is0V1sFbDwCgg=', 'test', 1);
 
@@ -142,8 +143,8 @@ select Users.username, Users.password, Users.real_name,
        Program_Areas.name
        from Users join Program_Areas on Users.program_area = Program_Areas.id;
 select Resources.info, Representatives.name, Representatives.email,
-       Representatives.phone, Partner_Types.name, partners.active
+       Representatives.phone, Partner_Types.name, Partners.active
        from Resources join Partners on Resources.partner = Partners.id
                         join Representatives on Partners.representative = Representatives.id
                         join Partner_Types on Partners.type = Partner_Types.id;
-select users.id, users.real_name, Program_Areas.name from users join program_areas on users.program_area = program_areas.id where users.username = 'test' && users.password = 'n4bQgYhMfWWaL-qgxVrQFaO_TxsrC4Is0V1sFbDwCgg='
+select Users.id, Users.real_name, Program_Areas.name from Users join Program_Areas on Users.program_area = Program_Areas.id where Users.username = 'test' && Users.password = 'n4bQgYhMfWWaL-qgxVrQFaO_TxsrC4Is0V1sFbDwCgg='
