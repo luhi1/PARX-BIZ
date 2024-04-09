@@ -54,7 +54,7 @@ func (u *UserData) valHandler(writer http.ResponseWriter, request *http.Request)
 
 	if u.dataVal(strings.TrimPrefix(request.URL.Path, "/userValidation/")) {
 		insert := db.QueryRow("select Users.id, Users.username, Users.password, Users.real_name,"+
-			" Program_Areas.name from Users join Program_Areas on Users.program_area = Program_Areas.id where users.UserID = ? && users.username = ? && users.Password = ?;", strconv.Itoa(u.ID), u.Username, u.Password)
+			" Program_Areas.name from Users join Program_Areas on Users.program_area = Program_Areas.id where Users.id = ? && Users.username = ? && Users.password = ?;", strconv.Itoa(u.ID), u.Username, u.Password)
 		insert.Scan(&u.ID, &u.Username, &u.Password, u.Real_Name, u.Program_Area)
 		if u.ID == 0 && u.Username == "" && u.Password == "" && u.Real_Name == "" && u.Program_Area == "" {
 			u.valid = DisplayError{"Invalid Credentials"}
@@ -91,7 +91,7 @@ func (u *UserData) dataVal(requestMethod string) bool {
 
 		valid = true
 		if requestMethod == "login" {
-			updateUser := db.QueryRow("select users.id, users.real_name, Program_Areas.name from users join program_areas on users.program_area = program_areas.id where users.username = ? && users.password = ?;", u.Username, u.Password)
+			updateUser := db.QueryRow("select Users.id, Users.real_name, Program_Areas.name from Users join Program_Areas on Users.program_area = Program_Areas.id where Users.username = ? && Users.password = ?;", u.Username, u.Password)
 			err := updateUser.Scan(&u.ID, &u.Real_Name, &u.Program_Area)
 			if err != nil {
 				return false
@@ -112,7 +112,7 @@ func (u *UserData) dataVal(requestMethod string) bool {
 
 	if valid && requestMethod == "signup" {
 		result, err := db.Exec(
-			"insert into users(id, username, password, real_name, program_area) values(?, ?, ?, ?, ?);",
+			"insert into Users(id, username, password, real_name, program_area) values(?, ?, ?, ?, ?);",
 			u.ID,
 			u.Username,
 			u.Password,
@@ -123,7 +123,7 @@ func (u *UserData) dataVal(requestMethod string) bool {
 			return false
 		}
 
-		getPA := db.QueryRow("select name from program_areas where id = ?;", programAreaInt)
+		getPA := db.QueryRow("select name from Program_Areas where id = ?;", programAreaInt)
 		getPA.Scan(&u.Program_Area)
 		fmt.Println(result.RowsAffected())
 	}
