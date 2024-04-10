@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="google" content="notranslate">
+    <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/beercss@3.1.1/dist/cdn/beer.min.css" rel="stylesheet">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/beercss@3.1.1/dist/cdn/beer.min.js"></script>
+    <script type="module"
+            src="https://cdn.jsdelivr.net/npm/material-dynamic-colors@0.1.7/dist/cdn/material-dynamic-colors.min.js"></script>
+</head>
+<body class="dark">
+<nav class="bottom m l">
+    <a class ="" href="./teacherPartners">
+        <img src="../static/logo.png" class="circle extra">
+    </a>
+    <a href="./login">
+        <i>login</i>
+        <div>Login</div>
+    </a>
+    <a href="./logout">
+        <i>logout</i>
+        <div>Logout</div>
+    </a>
+    <a href="./create">
+        <i>create</i>
+        <div>Add Partner</div>
+    </a>
+
+</nav>
+<nav class="bottom s">
+    <a href="./home">
+        <img src="../static/logo.png" class="circle margin">
+    </a>
+    <a href="./logout">
+        <i>login</i>
+        <div>Login</div>
+    </a>
+</nav>
+<main class="responsive">
+    <div id="teacherPartner" name="teacherPartner">
+        <form method="post" action="/create/submit" class="large-padding responsive" id="EventImage">
+            <article>
+                <div>
+                    <header class="blur">
+                        <nav>
+                            <h5 class="max">Add A Partner!</h5>
+                        </nav>
+                    </header>
+                    <div id = "grid" class="grid">
+                        <div class="s12 l4">
+                            <div class="field  label border">
+                                <input type="text"
+                                       id="Name" value="{{.Name}}" name="Name of Organization"
+                                       style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
+                                <label class="active">Name of Organization</label>
+                            </div>
+                        </div>
+                        <div class="s12 l4">
+                            <div class="field  label border">
+                                <input type="text"
+                                       id="Type" name="Type of Organization"
+                                       style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
+                                <label class="active">Type of Organization</label>
+                            </div>
+                        </div>
+                        <div class="s12 l4">
+                            <div class="field label border">
+                                <input type="text" id="Email" name="Email"
+                                       style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
+                                <label class="active">Email</label>
+                            </div>
+                        </div>
+                        <div class="s12 l4">
+                            <div class="field label border">
+                                <input type="text" id="Phone" name="Phone Number"
+                                       style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
+                                <label class="active">Phone Number</label>
+                            </div>
+                        </div>
+                        <div id = "resource_default_wrapper" class="s12 l4">
+                            <div id = "resource_default" name = "resource_default" class="field label border">
+                                <input type="text" id="Resource0" name="Resource0"
+                                       style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
+                                <label class="active">Resource</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space"></div>
+                </div>
+                <div class="space"></div>
+                <nav class = "left-align">
+                    <button type="button" id = "addResources" onclick="addResource()" class="">Add Resource</button>
+                    <button type="button" id = "remResources" onclick="remResource()" class="">Remove Resource</button>
+                </nav>
+                <nav class="left-align">
+                    <a href = "/teacherPartners">
+                        <button type="button" class="blur">Back</button>
+                    </a>
+                    <button type="submit" class="blur">Save</button>
+                </nav>
+
+            </article>
+        </form>
+    </div>
+</main>
+</body>
+<script>
+    // Get the img object using its Id
+    currID = 1
+    // Function to increase image size
+    function addResource() {
+        original_resource = document.getElementById("Resource0");
+        original_resource.setAttribute("id", "Resource");
+        document.getElementById("Resource").setAttribute("name", "Resource"+currID)
+        document.getElementById("Resource").setAttribute("id", "Resource"+currID)
+        cloned_resource = document.getElementById("resource_default_wrapper").cloneNode(true)
+        cloned_resource.setAttribute("name", "Resource"+currID)
+        cloned_resource.setAttribute("id", "Resource"+currID)
+        document.getElementById("grid").append(cloned_resource)
+        original_resource.setAttribute("id", "Resource0")
+        original_resource.setAttribute("name", "Resource0");
+        currID++
+    }
+
+    function remResource(){
+        if (currID-1 !== 0){
+            currID--
+            document.getElementById("Resource"+(currID)).remove()
+
+        }
+
+    }
+</script>
+</html>

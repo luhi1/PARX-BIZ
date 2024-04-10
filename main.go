@@ -39,10 +39,14 @@ func main() {
 
 	http.HandleFunc("/logout", func(writer http.ResponseWriter, request *http.Request) {
 		userInfo = UserData{}
-		http.Redirect(writer, request, "./login", 307)
+		http.Redirect(writer, request, "./teacherPartners", 307)
 	})
 
 	http.HandleFunc("/teacherPartners", partnerInfo.GETHandler)
+	http.HandleFunc("/create", partnerInfo.POSTHandler)
+	http.HandleFunc("/create/submit", partnerInfo.valHandler)
+	http.HandleFunc("/create/remove", partnerInfo.removeHandler)
+
 	/*
 		http.HandleFunc("/teacherCreateEvent", eventInfo.POSTHandler)
 
@@ -79,7 +83,7 @@ func main() {
 				tplExec(writer, "error.gohtml", DisplayError{err.Error()})
 			}
 		} else {
-			http.Redirect(writer, request, "./login", 301)
+			http.Redirect(writer, request, "./teacherPartners", 301)
 		}
 	})
 

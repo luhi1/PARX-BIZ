@@ -13,33 +13,25 @@
 </head>
 <body class = "dark">
 {{define "navbar"}}
-<nav class="bottom m l">
-    <a class ="" href="./teacherPartners">
-        <img src="../static/logo.png" class="circle extra">
-    </a>
-    <a href="./login">
-        <i>login</i>
-        <div>Login</div>
-    </a>
-    <a href="./logout">
-        <i>logout</i>
-        <div>Logout</div>
-    </a>
-    <a href="./create">
-        <i>create</i>
-        <div>Add Partner</div>
-    </a>
+    <nav class="bottom m l">
+        <a href="./home">
+            <img src="../static/logo.jpg" class="circle margin">
+        </a>
+        <a href="./login">
+            <i>login</i>
+            <div>Login</div>
+        </a>
 
-</nav>
-<nav class="bottom s">
-    <a href="./home">
-        <img src="../static/logo.png" class="circle margin">
-    </a>
-    <a href="./logout">
-        <i>login</i>
-        <div>Login</div>
-    </a>
-</nav>
+    </nav>
+    <nav class="bottom s">
+        <a href="./home">
+            <img src="../static/logo.jpg" class="circle margin">
+        </a>
+        <a href="./logout">
+            <i>login</i>
+            <div>Login</div>
+        </a>
+    </nav>
 {{end}}
 <main class="max">
     {{template "navbar"}}
@@ -72,10 +64,12 @@
             </header>
         </div>
     </div>
+
+
     <div class = "grid-container" style = "display:grid; grid-template-columns: repeat(2, 1fr); column-gap: 0.25%; row-gap: 1.5%; grid-auto-columns: auto auto auto ; grid-auto-flow: row">
         {{range $index, $val := .}}
-        <div class = "grid-item" style = "grid-row: auto">
-            <article class = "small" class = "Partner" id="{{.Name}}" name="{{.Name}}">
+            <div class = "grid-item" style = "grid-row: auto">
+                <article class = "small" class = "Partner" id="{{.Name}}" name="{{.Name}}">
                     <img id = "{{.Name}}img" class="responsive tiny" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F392%2F153%2Foriginal%2Fmodern-company-logo-design-vector.jpg&f=1&nofb=1&ipt=6167019925c3f057feacb64617ee3553359696e0914bfe67a786c84b37f0f5f8&ipo=images">
 
                     <script>
@@ -127,18 +121,10 @@
 
                     <form method="post" action="/eventValidation/teacherEvents" class="left-align responsive" id="EventImage">
                         <div class = "wrap blur center max">
-                            <h5 id = "PartnerName" value = "{{.Name}}" name = "Name of Organization" class="center"><strong>{{.Name}} </strong></h5>
+                            <h5 id = "PartnerName" class="center"><strong>{{.Name}} </strong></h5>
                             <details id = "details{{.Name}}" onclick="enlargeArticle({{.Name}})">
                                 <summary>Click to View More Info</summary>
                                 <div class="grid">
-                                    <div class="s12 l4" hidden>
-                                        <div class="field  label border">
-                                            <input type="text"
-                                                   id="Type" value="{{.Name}}" name="Name of Organization"
-                                                   style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
-                                            <label class="active">Name of Organization</label>
-                                        </div>
-                                    </div>
                                     <div class="s12 l4">
                                         <div class="field  label border">
                                             <input type="text"
@@ -162,32 +148,28 @@
                                         </div>
                                     </div>
                                     {{range $index, $val := .Resources}}
-                                    <div class="s12 l4">
-                                        <div class="field label border">
-                                            <input type="text" id="Resource{{$index}}" value="{{$val}}" name="Resource{{$index}}"
-                                                   style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
-                                            <label class="active">Resource</label>
+                                        <div class="s12 l4">
+                                            <div class="field label border">
+                                                <input type="text" id="Resource" value="{{$val}}" name="Resource"
+                                                       style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
+                                                <label class="active">Resource</label>
+                                            </div>
                                         </div>
-                                    </div>
                                     {{end}}
                                 </div>
                                 <div class="space"></div>
                                 <nav class="center-align">
                                     <button type="reset" class="blur">Reset</button>
-                                    <button type="submit" value = "remove" formaction="./create/remove" class="blur">Remove</button>
+                                    <button type="submit" value = "remove" formaction="./removeEvent" class="blur">Remove</button>
                                     <button type="submit" class="blur">Save</button>
                                 </nav>
                             </details>
                         </div>
                     </form>
-            </article>
-        </div>
+                </article>
+            </div>
         {{end}}
         <div class="large-space"></div>
-        <div class="large-space"></div>
-        <div class="large-space"></div>
-        <div class="large-space"></div>
-
     </div>
 </main>
 </body>
