@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 type PartnerInfo struct {
@@ -19,6 +20,12 @@ type PartnerInfo struct {
 var partners []PartnerInfo
 
 func (p *PartnerInfo) GETHandler(writer http.ResponseWriter, request *http.Request) {
+
+	if (userInfo != UserData{} && strings.TrimPrefix(request.URL.Path, "/") != "teacherPartners") {
+		http.Redirect(writer, request, "./teacherPartners", 303)
+	} else if (userInfo == UserData{} && strings.TrimPrefix(request.URL.Path, "/") != "home") {
+		http.Redirect(writer, request, "./home", 303)
+	}
 
 	partners = []PartnerInfo{}
 	rows, err := db.Query("select Partners.id, Partners.name, Representatives.email, Representatives.phone, Partner_Types.name, Partners.active from Partners join Partner_Types on Partners.type = Partner_Types.id join Representatives on Partners.representative = Representatives.id")
@@ -49,13 +56,12 @@ func (p *PartnerInfo) GETHandler(writer http.ResponseWriter, request *http.Reque
 		p.Resources = resources
 		partners = append(partners, *p)
 	}
-	err = tplExec(writer, "teacher_partners.gohtml", partners)
+	err = tplExec(writer, strings.TrimPrefix(request.URL.Path, "/")+".gohtml", partners)
 	//@TODO: REMOVE
 	if err != nil {
 		return
 	}
 }
-
 func (p *PartnerInfo) POSTHandler(writer http.ResponseWriter, request *http.Request) {
 	err := tplExec(writer, "create.gohtml", nil)
 	//@TODO: REMOVE
@@ -65,8 +71,7 @@ func (p *PartnerInfo) POSTHandler(writer http.ResponseWriter, request *http.Requ
 }
 
 func (p *PartnerInfo) valHandler(writer http.ResponseWriter, request *http.Request) {
-	var err error
-	err = request.ParseForm()
+	err := request.ParseForm()
 	if err != nil {
 		http.Redirect(writer, request, "./error", 303)
 		return
@@ -88,7 +93,7 @@ func (p *PartnerInfo) valHandler(writer http.ResponseWriter, request *http.Reque
 	p.Resources = resources
 
 	if p.dataVal() {
-		check := db.QueryRow("select id from partner_types where name = ?", p.Type)
+		check := db.QueryRow("select id from Partner_Types where name = ?", p.Type)
 		var partnerTypesID int
 		err := check.Scan(&partnerTypesID)
 		if err != nil {
@@ -96,14 +101,14 @@ func (p *PartnerInfo) valHandler(writer http.ResponseWriter, request *http.Reque
 			return
 		}
 
-		check = db.QueryRow("select id from representatives where email = ? and phone = ?", p.Email, p.Phone_Number)
+		check = db.QueryRow("select id from Representatives where email = ? and phone = ?", p.Email, p.Phone_Number)
 		var repID int64
 		err = check.Scan(&repID)
 		if err != nil {
 			repID = -1
 		}
 		if repID == -1 {
-			result, err := db.Exec("insert into representatives(email, phone) values (?, ?)",
+			result, err := db.Exec("insert into Representatives(email, phone) values (?, ?)",
 				p.Email, p.Phone_Number,
 			)
 			if err != nil {
@@ -114,7 +119,7 @@ func (p *PartnerInfo) valHandler(writer http.ResponseWriter, request *http.Reque
 			repID, _ = result.LastInsertId()
 		}
 
-		check = db.QueryRow("select id from partners where name = ?", p.Name)
+		check = db.QueryRow("select id from Partners where name = ?", p.Name)
 		var partID int64
 		err = check.Scan(&partID)
 		if err != nil {
@@ -122,7 +127,7 @@ func (p *PartnerInfo) valHandler(writer http.ResponseWriter, request *http.Reque
 		}
 
 		if partID == -1 {
-			result, err := db.Exec("insert into partners(`name`, representative, `type`, `active`) values (?, ?, ?, ?)",
+			result, err := db.Exec("insert into Partners(`name`, representative, `type`, `active`) values (?, ?, ?, ?)",
 				p.Name, repID, partnerTypesID, p.Active,
 			)
 			if err != nil {
@@ -134,11 +139,11 @@ func (p *PartnerInfo) valHandler(writer http.ResponseWriter, request *http.Reque
 		}
 
 		for i := 0; i < len(p.Resources); i++ {
-			check = db.QueryRow("select id from resources where info = ?", p.Resources[i])
+			check = db.QueryRow("select id from Resources where info = ?", p.Resources[i])
 			var resID int
 			err = check.Scan(&resID)
 			if err != nil {
-				vector, _ := db.Exec("insert into resources(partner, info) values(?, ?)",
+				vector, _ := db.Exec("insert into Resources(partner, info) values(?, ?)",
 					partID, p.Resources[i])
 				fmt.Println(vector.RowsAffected())
 			}
@@ -173,14 +178,14 @@ func (p *PartnerInfo) removeHandler(writer http.ResponseWriter, request *http.Re
 	p.Phone_Number = request.FormValue("Phone Number")
 	p.Active = 1
 
-	check := db.QueryRow("select id from partner_types where name = ?", p.Type)
+	check := db.QueryRow("select id from Partner_Types where name = ?", p.Type)
 	var partnerTypesID int
 	err = check.Scan(&partnerTypesID)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	check = db.QueryRow("select id from representatives where email = ? and phone = ?", p.Email, p.Phone_Number)
+	check = db.QueryRow("select id from Representatives where email = ? and phone = ?", p.Email, p.Phone_Number)
 	var repID int64
 	err = check.Scan(&repID)
 	if err != nil {
@@ -193,14 +198,14 @@ func (p *PartnerInfo) removeHandler(writer http.ResponseWriter, request *http.Re
 		}
 	}
 
-	exec, err := db.Exec("update partners set active = 0 where id = ?", p.ID)
+	exec, err := db.Exec("update Partners set active = 0 where id = ?", p.ID)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	fmt.Println(exec.RowsAffected())
 
-	resources, err := db.Exec("delete from resources where partner = ?",
+	resources, err := db.Exec("delete from Resources where partner = ?",
 		p.ID)
 	if err != nil {
 		fmt.Println(err)

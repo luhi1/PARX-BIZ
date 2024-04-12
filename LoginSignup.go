@@ -64,11 +64,8 @@ func (u *UserData) valHandler(writer http.ResponseWriter, request *http.Request)
 				http.Redirect(writer, request, "../login", 303)
 			}
 		} else {
-			if u.ID == 1 {
-				http.Redirect(writer, request, "../teacherEvents", 307)
-			} else {
-				http.Redirect(writer, request, "../home", 307)
-			}
+			http.Redirect(writer, request, "../teacherPartners", 307)
+
 		}
 	} else {
 		u.valid = DisplayError{"Invalid Credentials"}

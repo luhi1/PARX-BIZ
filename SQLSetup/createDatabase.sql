@@ -146,5 +146,4 @@ select Resources.info, Representatives.email,
        from Resources join Partners on Resources.partner = Partners.id
                         join Representatives on Partners.representative = Representatives.id
                         join Partner_Types on Partners.type = Partner_Types.id;
-select partners.id from partners where active = 1 and type = ? and representative = ? and `name` = ?;
 select Users.id, Users.real_name, Program_Areas.name from Users join Program_Areas on Users.program_area = Program_Areas.id where Users.username = 'test' && Users.password = 'n4bQgYhMfWWaL-qgxVrQFaO_TxsrC4Is0V1sFbDwCgg='

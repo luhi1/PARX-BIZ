@@ -5,9 +5,10 @@ import (
 	"database/sql"
 	"encoding/base64"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
 	"html/template"
 	"net/http"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type DisplayError struct {
@@ -23,10 +24,10 @@ type TeacherPageHandlers interface {
 }
 
 var db *sql.DB
+var userInfo = UserData{}
 
 // Start server run, files, and other shit.
 func main() {
-	userInfo := UserData{}
 	partnerInfo := PartnerInfo{}
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
@@ -39,13 +40,14 @@ func main() {
 
 	http.HandleFunc("/logout", func(writer http.ResponseWriter, request *http.Request) {
 		userInfo = UserData{}
-		http.Redirect(writer, request, "./teacherPartners", 307)
+		http.Redirect(writer, request, "./home", 307)
 	})
 
 	http.HandleFunc("/teacherPartners", partnerInfo.GETHandler)
 	http.HandleFunc("/create", partnerInfo.POSTHandler)
 	http.HandleFunc("/create/submit", partnerInfo.valHandler)
 	http.HandleFunc("/create/remove", partnerInfo.removeHandler)
+	http.HandleFunc("/home", partnerInfo.GETHandler)
 
 	/*
 		http.HandleFunc("/teacherCreateEvent", eventInfo.POSTHandler)
@@ -83,7 +85,7 @@ func main() {
 				tplExec(writer, "error.gohtml", DisplayError{err.Error()})
 			}
 		} else {
-			http.Redirect(writer, request, "./teacherPartners", 301)
+			http.Redirect(writer, request, "./home", 301)
 		}
 	})
 

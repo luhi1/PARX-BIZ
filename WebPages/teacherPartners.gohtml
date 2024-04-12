@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="google" content="notranslate">
-    <title>Home</title>
+    <title>Teacher Home</title>
     <link href="https://cdn.jsdelivr.net/npm/beercss@3.1.1/dist/cdn/beer.min.css" rel="stylesheet">
     <script type="module" src="https://cdn.jsdelivr.net/npm/beercss@3.1.1/dist/cdn/beer.min.js"></script>
     <script type="module"
@@ -17,17 +17,13 @@
     <a class ="" href="./teacherPartners">
         <img src="../static/logo.png" class="circle extra">
     </a>
-    <a href="./login">
-        <i>login</i>
-        <div>Login</div>
+    <a href="./create">
+        <i>create</i>
+        <div>Add Partner</div>
     </a>
     <a href="./logout">
         <i>logout</i>
         <div>Logout</div>
-    </a>
-    <a href="./create">
-        <i>create</i>
-        <div>Add Partner</div>
     </a>
 
 </nav>
@@ -35,9 +31,13 @@
     <a href="./home">
         <img src="../static/logo.png" class="circle margin">
     </a>
+    <a href="./create">
+        <i>create</i>
+        <div>Add Partner</div>
+    </a>
     <a href="./logout">
-        <i>login</i>
-        <div>Login</div>
+        <i>logout</i>
+        <div>Logout</div>
     </a>
 </nav>
 {{end}}
@@ -128,8 +128,8 @@
                     <form method="post" action="/eventValidation/teacherEvents" class="left-align responsive" id="EventImage">
                         <div class = "wrap blur center max">
                             <h5 id = "PartnerName" value = "{{.Name}}" name = "Name of Organization" class="center"><strong>{{.Name}} </strong></h5>
-                            <details id = "details{{.Name}}" onclick="enlargeArticle({{.Name}})">
-                                <summary>Click to View More Info</summary>
+                            <details id = "details{{.Name}}">
+                                <summary onclick="enlargeArticle({{.Name}})">Click to View More Info</summary>
                                 <div class="grid">
                                     <div class="s12 l4" hidden>
                                         <div class="field  label border">
