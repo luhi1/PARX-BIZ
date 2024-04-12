@@ -16,17 +16,13 @@
     <a class ="" href="./teacherPartners">
         <img src="../static/logo.png" class="circle extra">
     </a>
-    <a href="./login">
-        <i>login</i>
-        <div>Login</div>
+    <a href="./create">
+        <i>create</i>
+        <div>Add Partner</div>
     </a>
     <a href="./logout">
         <i>logout</i>
         <div>Logout</div>
-    </a>
-    <a href="./create">
-        <i>create</i>
-        <div>Add Partner</div>
     </a>
 
 </nav>
@@ -34,10 +30,15 @@
     <a href="./home">
         <img src="../static/logo.png" class="circle margin">
     </a>
-    <a href="./logout">
-        <i>login</i>
-        <div>Login</div>
+    <a href="./create">
+        <i>create</i>
+        <div>Add Partner</div>
     </a>
+    <a href="./logout">
+        <i>logout</i>
+        <div>Logout</div>
+    </a>
+
 </nav>
 <main class="responsive">
     <div id="teacherPartner" name="teacherPartner">
@@ -52,37 +53,44 @@
                     <div id = "grid" class="grid">
                         <div class="s12 l4">
                             <div class="field  label border">
-                                <input type="text"
+                                <input type="text"  required="required"
                                        id="Name" value="{{.Name}}" name="Name of Organization"
                                        style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
                                 <label class="active">Name of Organization</label>
                             </div>
                         </div>
                         <div class="s12 l4">
-                            <div class="field  label border">
-                                <input type="text"
-                                       id="Type" name="Type of Organization"
-                                       style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
-                                <label class="active">Type of Organization</label>
+                            <div class="field label border">
+                                <select  required="required" name = "Type of Organization" style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
+                                    <option value="" selected=""></option>
+                                    <option>Business</option>
+                                    <option>Charity</option>
+                                    <option>Cooperative</option>
+                                    <option>Event Coordinator</option>
+                                    <option>Local Business</option>
+                                    <option>Student-Run Organization</option>
+                                </select>
+                                <i>arrow_drop_down</i>
+                                <label class="active">CTE Program Area</label>
                             </div>
                         </div>
                         <div class="s12 l4">
                             <div class="field label border">
-                                <input type="text" id="Email" name="Email"
+                                <input type="email" id="Email" name="Email" required="required"
                                        style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
                                 <label class="active">Email</label>
                             </div>
                         </div>
                         <div class="s12 l4">
                             <div class="field label border">
-                                <input type="text" id="Phone" name="Phone Number"
+                                <input type="number" id="Phone" name="Phone Number"  required="required"
                                        style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
                                 <label class="active">Phone Number</label>
                             </div>
                         </div>
                         <div id = "resource_default_wrapper" class="s12 l4">
                             <div id = "resource_default" name = "resource_default" class="field label border">
-                                <input type="text" id="Resource0" name="Resource0"
+                                <input type="text" id="Resource0" name="Resource0"  required="required"
                                        style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
                                 <label class="active">Resource</label>
                             </div>

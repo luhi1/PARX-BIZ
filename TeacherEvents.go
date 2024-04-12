@@ -12,7 +12,7 @@ type PartnerInfo struct {
 	Name         string
 	Type         string
 	Email        string
-	Phone_Number string
+	Phone_Number int
 	Resources    []string
 	Active       int8
 }
@@ -80,9 +80,14 @@ func (p *PartnerInfo) valHandler(writer http.ResponseWriter, request *http.Reque
 	p.Name = request.FormValue("Name of Organization")
 	p.Type = request.FormValue("Type of Organization")
 	p.Email = request.FormValue("Email")
-	p.Phone_Number = request.FormValue("Phone Number")
-	//p.Resources
+	phone_Number := request.FormValue("Phone Number")
+	p.Phone_Number, err = strconv.Atoi(phone_Number)
 	p.Active = 1
+
+	if err != nil {
+		http.Redirect(writer, request, "./error", 303)
+		return
+	}
 
 	index := 0
 	var resources []string
@@ -153,7 +158,7 @@ func (p *PartnerInfo) valHandler(writer http.ResponseWriter, request *http.Reque
 }
 
 func (p *PartnerInfo) dataVal() bool {
-	if p.Name == "" || p.Type == "" || p.Email == "" || p.Phone_Number == "" {
+	if p.Name == "" || p.Type == "" || p.Email == "" || p.Phone_Number < 0 {
 		return false
 	}
 	for i := 0; i < len(p.Resources); i++ {
@@ -175,8 +180,14 @@ func (p *PartnerInfo) removeHandler(writer http.ResponseWriter, request *http.Re
 	p.Name = request.FormValue("Name of Organization")
 	p.Type = request.FormValue("Type of Organization")
 	p.Email = request.FormValue("Email")
-	p.Phone_Number = request.FormValue("Phone Number")
+	phone_Number := request.FormValue("Phone Number")
+	p.Phone_Number, err = strconv.Atoi(phone_Number)
 	p.Active = 1
+
+	if err != nil {
+		http.Redirect(writer, request, "./error", 303)
+		return
+	}
 
 	check := db.QueryRow("select id from Partner_Types where name = ?", p.Type)
 	var partnerTypesID int

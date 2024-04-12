@@ -130,41 +130,48 @@
                             <h5 id = "PartnerName" value = "{{.Name}}" name = "Name of Organization" class="center"><strong>{{.Name}} </strong></h5>
                             <details id = "details{{.Name}}">
                                 <summary onclick="enlargeArticle({{.Name}})">Click to View More Info</summary>
-                                <div class="grid">
-                                    <div class="s12 l4" hidden>
+                                <div id = "grid" class="grid">
+                                    <div class="s12 l4">
                                         <div class="field  label border">
-                                            <input type="text"
-                                                   id="Type" value="{{.Name}}" name="Name of Organization"
+                                            <input type="text"  required="required"
+                                                   id="Name" value="{{.Name}}" name="Name of Organization"
                                                    style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
                                             <label class="active">Name of Organization</label>
                                         </div>
                                     </div>
                                     <div class="s12 l4">
-                                        <div class="field  label border">
-                                            <input type="text"
-                                                   id="Type" value="{{.Type}}" name="Type of Organization"
-                                                   style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
-                                            <label class="active">Type of Organization</label>
+                                        <div class="field label border">
+                                            <select  required="required" name = "Type of Organization" style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
+                                                <option value="{{.Type}}" selected="true">{{.Type}}</option>
+                                                <option>Business</option>
+                                                <option>Charity</option>
+                                                <option>Cooperative</option>
+                                                <option>Event Coordinator</option>
+                                                <option>Local Business</option>
+                                                <option>Student-Run Organization</option>
+                                            </select>
+                                            <i>arrow_drop_down</i>
+                                            <label class="active">CTE Program Area</label>
                                         </div>
                                     </div>
                                     <div class="s12 l4">
                                         <div class="field label border">
-                                            <input type="text" id="Email" value="{{.Email}}" name="Email"
+                                            <input type="email" id="Email" value ="{{.Email}}" name="Email" required="required"
                                                    style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
                                             <label class="active">Email</label>
                                         </div>
                                     </div>
                                     <div class="s12 l4">
                                         <div class="field label border">
-                                            <input type="text" id="Phone" value="{{.Phone_Number}}" name="Phone Number"
+                                            <input type="number" id="Phone" name="Phone Number"  value = "{{.Phone_Number}}" required="required"
                                                    style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
                                             <label class="active">Phone Number</label>
                                         </div>
                                     </div>
                                     {{range $index, $val := .Resources}}
-                                    <div class="s12 l4">
-                                        <div class="field label border">
-                                            <input type="text" id="Resource{{$index}}" value="{{$val}}" name="Resource{{$index}}"
+                                    <div id = "resource_default_wrapper" class="s12 l4">
+                                        <div id = "resource_default" name = "resource_default" class="field label border">
+                                            <input type="text" value = "{{$val}}" id="Resource{{$index}}" name="Resource{{$index}}"  required="required"
                                                    style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
                                             <label class="active">Resource</label>
                                         </div>
@@ -172,7 +179,12 @@
                                     {{end}}
                                 </div>
                                 <div class="space"></div>
-                                <nav class="center-align">
+                                <nav class = "left-align">
+                                    <button type="button" id = "addResources" onclick="addResource()" class="">Add Resource</button>
+                                    <button type="button" id = "remResources" onclick="remResource()" class="">Remove Resource</button>
+                                </nav>
+                                <div class="space"></div>
+                                <nav class="left-align">
                                     <button type="reset" class="blur">Reset</button>
                                     <button type="submit" value = "remove" formaction="./create/remove" class="blur">Remove</button>
                                     <button type="submit" class="blur">Save</button>
@@ -191,4 +203,31 @@
     </div>
 </main>
 </body>
+<script>
+    // Get the img object using its Id
+    currID = 1
+    // Function to increase image size
+    function addResource() {
+        original_resource = document.getElementById("Resource0");
+        original_resource.setAttribute("id", "Resource");
+        document.getElementById("Resource").setAttribute("name", "Resource"+currID)
+        document.getElementById("Resource").setAttribute("id", "Resource"+currID)
+        cloned_resource = document.getElementById("resource_default_wrapper").cloneNode(true)
+        cloned_resource.setAttribute("name", "Resource"+currID)
+        cloned_resource.setAttribute("id", "Resource"+currID)
+        document.getElementById("grid").append(cloned_resource)
+        original_resource.setAttribute("id", "Resource0")
+        original_resource.setAttribute("name", "Resource0");
+        currID++
+    }
+
+    function remResource(){
+        if (currID-1 !== 0){
+            currID--
+            document.getElementById("Resource"+(currID)).remove()
+
+        }
+
+    }
+</script>
 </html>

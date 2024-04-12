@@ -41,12 +41,12 @@ CREATE TABLE `Representatives`
 (
     `id`           BIGINT AUTO_INCREMENT,
     `email` VARCHAR(255) NOT NULL,
-    `phone` VARCHAR(255) NOT NULL,
+    `phone` BIGINT NOT NULL,
     PRIMARY KEY (`id`)
 );
 insert into Representatives( email, phone)
 values
-    ('cathy@gmail.com', '224-555-1234');
+    ('cathy@gmail.com', 2245551234);
 
 CREATE TABLE `Partner_Types`
 (
