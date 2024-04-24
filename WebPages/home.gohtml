@@ -11,116 +11,146 @@
     <script type="module"
             src="https://cdn.jsdelivr.net/npm/material-dynamic-colors@0.1.7/dist/cdn/material-dynamic-colors.min.js"></script>
 </head>
-<body>
+<body class = "dark">
 {{define "navbar"}}
-<nav class="left m l">
-    <img src="../static/parxfull.png" class="circle margin">
-    <a href="./studentEvents">
-        <i>event</i>
-        <div>Events</div>
+<nav class="bottom m l">
+    <a class ="" href="./teacherPartners">
+        <img src="../static/logo.png" class="circle extra">
     </a>
-    <a href="./home">
-        <i>home</i>
-        <div>Home</div>
-    </a>
-    <a href="./qna">
-        <i>q&a</i>
-        <div>Q&A</div>
-    </a>
-    <a href="./logout">
-        <i>logout</i>
-        <div>Logout</div>
+    <a href="./login">
+        <i>login</i>
+        <div>Login</div>
     </a>
 
 </nav>
 <nav class="bottom s">
-    <img src="../static/parxfull.png" class="circle margin">
-    <a href="./studentEvents">
-        <i>event</i>
-        <div>Events</div>
-    </a>
     <a href="./home">
-        <i>home</i>
-        <div>Home</div>
+        <img src="../static/logo.png" class="circle margin">
     </a>
-    <a href="./qna">
-        <i>q&a</i>
-        <div>Q&A</div>
-    </a>
-    <a href="./logout">
-        <i>logout</i>
-        <div>Logout</div>
+    <a href="./login">
+        <i>login</i>
+        <div>Login</div>
     </a>
 </nav>
 {{end}}
-{{template "navbar"}}
-<main class="responsive">
-    <article>
-        <h6>Clark County School District</h6>
-        <h6>{{.U.Name}}</h6>
-        <h6>Grade: {{.U.Grade}}</h6>
-        <h6>Points: {{.U.Points}}</h6>
-    </article>
+<main class="max">
+    {{template "navbar"}}
+    <div class="field max large prefix round fill">
+        <i class="front">search</i>
+        <input placeholder="Search text">
+        <div class="dropdown min">
+            <header class="fixed">
+                <div class="field large prefix suffix no-margin">
+                    <i class="front">arrow_backward</i>
+                    <input id = "searchbar" onkeyup="
 
-    <article class="blur">
-        <h6><strong>Prizes</strong></h6>
-        {{range $index, $val := .Prizes}}
-        <h6>{{$val.PrizeName}}: {{$val.Points}} Points Threshold</h6>
+  let input = document.getElementById('searchbar').value
+  input=input.toLowerCase();
+  let x = document.getElementsByClassName('grid-item');
+
+  for (i = 0; i < x.length; i++) {
+      if (!x[i].id.toLowerCase().includes(input)) {
+          x[i].style.display = 'none'
+      }
+      else {
+        x[i].style.display = 'block';
+      }
+    }
+      "
+
+                           placeholder="Search text">
+                    <i class="front">close</i>
+                </div>
+            </header>
+        </div>
+    </div>
+    <div class = "grid-container" style = "display:grid; grid-template-columns: repeat(2, 1fr); column-gap: 0.25%; row-gap: 1.5%; grid-auto-columns: auto auto auto ; grid-auto-flow: row">
+        {{range $index, $val := .}}
+        <div class = "grid-item" id ="item{{.Name}}" style = "grid-row: auto">
+            <article class = "small" class = "Partner" id="{{.Name}}" name="{{.Name}}">
+                <img id = "{{.Name}}img" class="responsive tiny" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F392%2F153%2Foriginal%2Fmodern-company-logo-design-vector.jpg&f=1&nofb=1&ipt=6167019925c3f057feacb64617ee3553359696e0914bfe67a786c84b37f0f5f8&ipo=images">
+
+                <script>
+                    // Get the img object using its Id
+                    expanded = false
+                    recursive = false;
+                    currExpanded = ""
+
+                    // Function to increase image size
+                    function enlargeArticle(name) {
+                        if (currExpanded !== name && currExpanded !== ""){
+                            expanded = true
+                            recursive = true;
+                            enlargeArticle(currExpanded)
+                        }
+                        img = document.getElementById(name+"img");
+                        art = document.getElementById(name);
+                        det = document.getElementById("details"+name)
+
+                        // Set image size to 1.5 times original
+                        if (expanded){
+                            expanded = false;
+                            art.className = "small"
+                            img.className = "responsive tiny";
+                            art.parentElement.parentElement.className = "grid-container"
+                            art.parentElement.parentElement.style = "display:grid; grid-template-columns: repeat(2, 1fr); column-gap: 0.25%; row-gap: 1.5%; grid-auto-columns: auto auto auto ; grid-auto-flow: row"
+                            currExpanded = ""
+                            if (recursive === true){
+                                det.removeAttribute("open")
+                                recursive = false;
+                            }
+                        } else {
+                            expanded = true
+
+                            art.className = ""
+                            art.parentElement.parentElement.style = "display:grid; grid-template-columns: repeat(4, 1fr); column-gap: 0.25%; row-gap: 1.5%; grid-auto-columns: auto auto auto ; grid-auto-flow: row; max-width: 100%"
+
+                            img.className = "responsive fill center";
+
+                            currExpanded = name;
+
+
+                        }
+
+                    }
+
+                </script>
+
+
+        
+                <article class = "wrap blur center">
+                    <h5 id = "PartnerName" value = "{{.Name}}" name = "Name of Organization" class="center"><strong>{{.Name}} </strong></h5>
+                    <details id = "details{{.Name}}">
+                        <summary onclick="enlargeArticle({{.Name}})">Click to View More Info</summary>
+                        <div>
+                            <div class="s12 l4">
+                                <article id="Type"><strong>Type:</strong> {{.Type}}</article>
+                            </div>
+                            <div class="s12 l4">
+                                <article id="Email"><strong>Email:</strong> {{.Email}}</article>
+                            </div>
+                            <div class="s12 l4">
+                                <article id="Phone"><strong>Phone Number:</strong> {{.Phone_Number}}</article>
+                            </div>
+                            <article class = "blur">
+                                <h6>Resources</h6>
+                                {{range $index, $val := .Resources}}
+                                <article>
+                                    <h6 id="Resource{{$index}}">{{$val}}</h6>
+                                </article>
+                                {{end}}
+                            </article>
+                        </div>
+                    </details>
+                </article>
+            </article>
+        </div>
         {{end}}
-    </article>
-    <div class="grid">
-        <div class="s12 m6 l3">
-            <article class="small">
-                <div class="progress left">
+        <div class="large-space"></div>
+        <div class="large-space"></div>
+        <div class="large-space"></div>
+        <div class="large-space"></div>
 
-                </div>
-                <h5>9th Winners</h5>
-                <ol>
-                    {{range $v := .Winners.NinthWinners}}
-                        <li>{{$v}}</li>
-                    {{end}}
-                </ol>
-            </article>
-        </div>
-        <div class="s12 m6 l3">
-            <article class="small">
-                <div class="progress left">
-
-                </div>
-                <h5>10th Winners</h5>
-                <ol>
-                    {{range $v := .Winners.TenthWinners}}
-                        <li>{{$v}}</li>
-                    {{end}}
-                </ol>
-            </article>
-        </div>
-        <div class="s12 m6 l3">
-            <article class="small">
-                <div class="progress left">
-
-                </div>
-                <h5>11th Winners</h5>
-                <ol>
-                    {{range $v := .Winners.EleventhWinners}}
-                        <li>{{$v}}</li>
-                    {{end}}
-                </ol>
-            </article>
-        </div>
-        <div class="s12 m6 l3">
-            <article class="small">
-                <div class="progress left">
-
-                </div>
-                <h5>12th Winners</h5>
-                <ol>
-                    {{range $v := .Winners.TwelvthWinners}}
-                        <li>{{$v}}</li>
-                    {{end}}
-                </ol>
-            </article>
-        </div>
     </div>
 </main>
 </body>

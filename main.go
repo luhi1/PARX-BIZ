@@ -5,9 +5,10 @@ import (
 	"database/sql"
 	"encoding/base64"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
 	"html/template"
 	"net/http"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type DisplayError struct {
@@ -23,15 +24,11 @@ type TeacherPageHandlers interface {
 }
 
 var db *sql.DB
+var userInfo = UserData{}
 
 // Start server run, files, and other shit.
 func main() {
-	userInfo := UserData{}
-	eventInfo := EventInfo{}
-	prize := Prize{}
-	winners := Winners{}
-	homeData := HomeData{U: &userInfo}
-	studentEventInformation := studentEventInfo{U: &userInfo}
+	partnerInfo := PartnerInfo{}
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
@@ -41,50 +38,59 @@ func main() {
 
 	http.HandleFunc("/userValidation/", userInfo.valHandler)
 
-	http.HandleFunc("/teacherEvents", eventInfo.GETHandler)
-
-	http.HandleFunc("/teacherCreateEvent", eventInfo.POSTHandler)
-
-	http.HandleFunc("/winners", winners.GETHandler)
-	http.HandleFunc("/prizes", prize.GETHandler)
-	http.HandleFunc("/eventValidation/", eventInfo.valHandler)
-	http.HandleFunc("/removeEvent", eventInfo.removeHandler)
-	http.HandleFunc("/teacherCreateEvent/createEvent", eventInfo.createEvent)
-	http.HandleFunc("/reroll", winners.valHandler)
-	http.HandleFunc("/prizeChecking", prize.valHandler)
-	http.HandleFunc("/createPrize", prize.POSTHandler)
-	http.HandleFunc("/createPrizes", prize.createPrize)
-	http.HandleFunc("/studentEvents", studentEventInformation.GETStudentHandler)
-	http.HandleFunc("/dropOut", studentEventInformation.dropOutHandler)
-	http.HandleFunc("/home", homeData.GETStudentHandler)
-	http.HandleFunc("/quarterReport", winners.report)
-	http.HandleFunc("/studentSignupEvent", studentEventInformation.studentSignupEventHandler)
 	http.HandleFunc("/logout", func(writer http.ResponseWriter, request *http.Request) {
 		userInfo = UserData{}
-		http.Redirect(writer, request, "./login", 307)
-	})
-	http.HandleFunc("/qna", func(writer http.ResponseWriter, request *http.Request) {
-		multiTplExec(writer, "qna.gohtml", nil, "home.gohtml")
-	})
-	http.HandleFunc("/bugs", func(writer http.ResponseWriter, request *http.Request) {
-		request.ParseForm()
-		db.Exec("insert into bugs(bugs) values(?)", request.FormValue("ProblemDesc"))
-		http.Redirect(writer, request, "/home", 307)
+		http.Redirect(writer, request, "./home", 307)
 	})
 
+	http.HandleFunc("/teacherPartners", partnerInfo.GETHandler)
+	http.HandleFunc("/create", partnerInfo.POSTHandler)
+	http.HandleFunc("/create/submit", partnerInfo.valHandler)
+	http.HandleFunc("/create/remove", partnerInfo.removeHandler)
+	http.HandleFunc("/create/update", partnerInfo.updateHandler)
+	http.HandleFunc("/home", partnerInfo.GETHandler)
+
+	/*
+		http.HandleFunc("/teacherCreateEvent", eventInfo.POSTHandler)
+
+		http.HandleFunc("/winners", winners.GETHandler)
+		http.HandleFunc("/prizes", prize.GETHandler)
+		http.HandleFunc("/eventValidation/", eventInfo.valHandler)
+		http.HandleFunc("/removeEvent", eventInfo.removeHandler)
+		http.HandleFunc("/teacherCreateEvent/createEvent", eventInfo.createEvent)
+		http.HandleFunc("/reroll", winners.valHandler)
+		http.HandleFunc("/prizeChecking", prize.valHandler)
+		http.HandleFunc("/createPrize", prize.POSTHandler)
+		http.HandleFunc("/createPrizes", prize.createPrize)
+		http.HandleFunc("/studentEvents", studentEventInformation.GETStudentHandler)
+		http.HandleFunc("/dropOut", studentEventInformation.dropOutHandler)
+		http.HandleFunc("/home", homeData.GETStudentHandler)
+		http.HandleFunc("/quarterReport", winners.report)
+		http.HandleFunc("/studentSignupEvent", studentEventInformation.studentSignupEventHandler)
+
+		http.HandleFunc("/qna", func(writer http.ResponseWriter, request *http.Request) {
+			multiTplExec(writer, "qna.gohtml", nil, "teacher_partners.gohtml")
+		})
+		http.HandleFunc("/bugs", func(writer http.ResponseWriter, request *http.Request) {
+			request.ParseForm()
+			db.Exec("insert into bugs(bugs) values(?)", request.FormValue("ProblemDesc"))
+			http.Redirect(writer, request, "/home", 307)
+		})
+
+
+	*/
 	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
 		if request.URL.Path != "/" {
-			err := tplExec(writer, "error.gohtml", nil)
-			//@TODO: REMOVE
+			err := tplExec(writer, "error.gohtml", DisplayError{"Error 404"})
 			if err != nil {
-				return
+				tplExec(writer, "error.gohtml", DisplayError{err.Error()})
 			}
 		} else {
-			http.Redirect(writer, request, "./login", 301)
+			http.Redirect(writer, request, "./home", 301)
 		}
 	})
 
-	initdb, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/fbla")
+	initDB, err := sql.Open("mysql", "root:test@tcp(127.0.0.1:3306)/fblacnp")
 
 	if err != nil {
 		panic(err)
@@ -92,13 +98,10 @@ func main() {
 
 	defer db.Close()
 
-	db = initdb
-
+	db = initDB
 	fmt.Println("Connected to DB")
 
-	/*@todo: Add this to the setup wizard eventually */
 	fmt.Println("Server is running on port 8082")
-
 	err = http.ListenAndServe(":8082", nil)
 	if err != nil {
 		fmt.Println("Error starting server, aborting tasks")

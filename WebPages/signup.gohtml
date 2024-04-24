@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">
-    <title>ParX Signup</title>
+    <title>Sign Up</title>
 </head>
 <body>
 <main class="container">
@@ -15,9 +15,9 @@
                     <h1><kbd><strong>ParX</strong></kbd></h1>
                     <h6>
                         <blockquote>
-                            "The shortest distance between two points is a straight line."
+                            "When you go in you're essentially leaving a version of yourself."
                             <footer>
-                                <cite>- Archimedes</cite>
+                                <cite>- US Marine</cite>
                             </footer>
                         </blockquote>
                     </h6>
@@ -28,17 +28,23 @@
                 <kbd>
                     <text>{{.ErrorDescription}}</text>
                 </kbd>
-                <input type="text" id="name" name="name" placeholder="Name" required="required">
-                <select id="grade" name="grade" required="required">
-                    <option value="" selected="">Grade</option>
-                    <option>9</option>
-                    <option>10</option>
-                    <option>11</option>
-                    <option>12</option>
-                </select>
-                <input type="number" id="IdNumber" max="9999999" name="IdNumber" placeholder="Student ID #"
+                <input type="number" id="ID" max="9999999" name="ID" placeholder="ID #"
                        required="required">
-                <input type="password" id="password" name="password" placeholder="Password" required="required">
+                <input type="text" id="Username" name="Username" placeholder="Username" required="required">
+                <input type="password" id="Password" name="Password" placeholder="Password" required="required">
+                <input type="text" id="Real_Name" name="Real_Name" placeholder="Real Name" required="required">
+
+                <select id="Program_Area" name="Program_Area" required="required">
+                    <option value="" selected="">CTE Program Area</option>
+                    <option value = "1">Architectural Design</option>
+                    <option value = "2">Biomedical</option>
+                    <option value = "3">Business</option>
+                    <option value = "4">Computer Science</option>
+                    <option value = "5">Cybersecurity</option>
+                    <option value = "6">Engineering</option>
+                    <option value = "7">Graphic Design</option>
+                </select>
+
                 <button type="submit" class="primary">Sign Up</button>
                 <a href="/login">
                     <text>Log In</text>

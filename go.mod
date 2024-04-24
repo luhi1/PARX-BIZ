@@ -1,4 +1,4 @@
-module PARX-WebApp
+module PARX-BIZ
 
 go 1.19
 
