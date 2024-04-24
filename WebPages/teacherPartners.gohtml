@@ -54,7 +54,7 @@
 
   let input = document.getElementById('searchbar').value
   input=input.toLowerCase();
-  let x = document.getElementsByClassName('Event');
+  let x = document.getElementsByClassName('grid-item');
 
   for (i = 0; i < x.length; i++) {
       if (!x[i].id.toLowerCase().includes(input)) {
@@ -74,7 +74,7 @@
     </div>
     <div class = "grid-container" style = "display:grid; grid-template-columns: repeat(2, 1fr); column-gap: 0.25%; row-gap: 1.5%; grid-auto-columns: auto auto auto ; grid-auto-flow: row">
         {{range $index, $val := .}}
-        <div class = "grid-item" style = "grid-row: auto">
+        <div class = "grid-item" id ="item{{.Name}}"style = "grid-row: auto">
             <article class = "small" class = "Partner" id="{{.Name}}" name="{{.Name}}">
                     <img id = "{{.Name}}img" class="responsive tiny" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F392%2F153%2Foriginal%2Fmodern-company-logo-design-vector.jpg&f=1&nofb=1&ipt=6167019925c3f057feacb64617ee3553359696e0914bfe67a786c84b37f0f5f8&ipo=images">
 
@@ -123,14 +123,55 @@
                         }
 
                     </script>
+                    <script id = "s{{.Name}}" currID = -1>
+                        // Get the img object using its Id
+                        // Function to increase image size
+                        name = "s"+{{.Name}}
+                        currID = parseInt(document.getElementById(name).getAttribute("currID"))
+
+                        function addResource(uname) {
+                            ucurrID = parseInt(document.getElementById("s"+uname).getAttribute("currID"))
+                            ucurrID++
+                            document.getElementById("s"+uname).setAttribute("currID", ucurrID)
+
+                            original_resource = document.getElementById("Resource0");
+                            original_resource.setAttribute("id", "Resource"); 
+                            document.getElementById("Resource").setAttribute("name", "Resource"+ucurrID)
+                            document.getElementById("Resource").setAttribute("id", "Resource"+ucurrID)
+                            cloned_resource = document.getElementById("resource_default_wrapper").cloneNode(true)
+                            cloned_resource.setAttribute("name", "Resource"+ucurrID)
+                            cloned_resource.setAttribute("id", "Resource"+ucurrID)
+                            document.getElementById(uname+"grid").append(cloned_resource)
+                            original_resource.setAttribute("id", "Resource0")
+                            original_resource.setAttribute("name", "Resource0");
 
 
-                    <form method="post" action="/eventValidation/teacherEvents" class="left-align responsive" id="EventImage">
+                              
+                        }
+                        function incrementResources(){
+                            currID++
+                            document.getElementById(name).setAttribute("currID", currID)
+                        }
+                        function remResource(uname){
+                            ucurrID = parseInt(document.getElementById("s"+uname).getAttribute("currID"))
+                            
+                            if (ucurrID !== -1){
+                                document.getElementById(uname+"grid").removeChild(document.getElementById(uname+"grid").lastChild)
+                                uname = "s"+uname
+                                ucurrID--;
+                                document.getElementById(uname).setAttribute("currID", ucurrID)
+                            }
+
+                        }
+                    </script>
+
+
+                    <form method="post" action="/create/update" class="left-align responsive" id="EventImage">
                         <div class = "wrap blur center max">
                             <h5 id = "PartnerName" value = "{{.Name}}" name = "Name of Organization" class="center"><strong>{{.Name}} </strong></h5>
                             <details id = "details{{.Name}}">
                                 <summary onclick="enlargeArticle({{.Name}})">Click to View More Info</summary>
-                                <div id = "grid" class="grid">
+                                <div id = "{{.Name}}grid" class="grid">
                                     <div class="s12 l4">
                                         <div class="field  label border">
                                             <input type="text"  required="required"
@@ -175,17 +216,17 @@
                                                    style="clip-path: polygon(0% 0%, 0.75rem 0%, 0.75rem 0.5rem, 3.0625rem 0.5rem, 3.0625rem 0%, 100% 0%, 100% 100%, 0% 100%);">
                                             <label class="active">Resource</label>
                                         </div>
+                                        <script>incrementResources()</script>
                                     </div>
                                     {{end}}
                                 </div>
                                 <div class="space"></div>
                                 <nav class = "left-align">
-                                    <button type="button" id = "addResources" onclick="addResource()" class="">Add Resource</button>
-                                    <button type="button" id = "remResources" onclick="remResource()" class="">Remove Resource</button>
+                                    <button type="button" id = "addResources" onclick="addResource({{.Name}})" class="">Add Resource</button>
+                                    <button type="button" id = "remResources" onclick="remResource({{.Name}})" class="">Remove Resource</button>
                                 </nav>
                                 <div class="space"></div>
                                 <nav class="left-align">
-                                    <button type="reset" class="blur">Reset</button>
                                     <button type="submit" value = "remove" formaction="./create/remove" class="blur">Remove</button>
                                     <button type="submit" class="blur">Save</button>
                                 </nav>
@@ -203,31 +244,4 @@
     </div>
 </main>
 </body>
-<script>
-    // Get the img object using its Id
-    currID = 1
-    // Function to increase image size
-    function addResource() {
-        original_resource = document.getElementById("Resource0");
-        original_resource.setAttribute("id", "Resource");
-        document.getElementById("Resource").setAttribute("name", "Resource"+currID)
-        document.getElementById("Resource").setAttribute("id", "Resource"+currID)
-        cloned_resource = document.getElementById("resource_default_wrapper").cloneNode(true)
-        cloned_resource.setAttribute("name", "Resource"+currID)
-        cloned_resource.setAttribute("id", "Resource"+currID)
-        document.getElementById("grid").append(cloned_resource)
-        original_resource.setAttribute("id", "Resource0")
-        original_resource.setAttribute("name", "Resource0");
-        currID++
-    }
-
-    function remResource(){
-        if (currID-1 !== 0){
-            currID--
-            document.getElementById("Resource"+(currID)).remove()
-
-        }
-
-    }
-</script>
 </html>

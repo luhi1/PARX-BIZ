@@ -227,6 +227,71 @@ func (p *PartnerInfo) removeHandler(writer http.ResponseWriter, request *http.Re
 	http.Redirect(writer, request, "../teacherPartners", 307)
 }
 
+func (p *PartnerInfo) updateHandler(writer http.ResponseWriter, request *http.Request) {
+	var err error
+	err = request.ParseForm()
+	if err != nil {
+		http.Redirect(writer, request, "./error", 303)
+		return
+	}
+
+	p.Name = request.FormValue("Name of Organization")
+	p.Type = request.FormValue("Type of Organization")
+	p.Email = request.FormValue("Email")
+	phone_Number := request.FormValue("Phone Number")
+	p.Phone_Number, err = strconv.Atoi(phone_Number)
+	p.Active = 1
+
+	index := 0
+	var resources []string
+	for request.FormValue("Resource"+strconv.Itoa(index)) != "" {
+		resources = append(resources, request.FormValue("Resource"+strconv.Itoa(index)))
+		index++
+	}
+	p.Resources = resources
+	fmt.Println(p)
+
+	if err != nil {
+		http.Redirect(writer, request, "./error", 303)
+		return
+	}
+
+	check := db.QueryRow("select id from Partner_Types where name = ?", p.Type)
+	var partnerTypesID int
+	err = check.Scan(&partnerTypesID)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	check = db.QueryRow("select id from Representatives where email = ? and phone = ?", p.Email, p.Phone_Number)
+	var repID int64
+	err = check.Scan(&repID)
+	if err != nil {
+		repID = -1
+	}
+
+	for i := 0; i < len(partners); i++ {
+		if partners[i].Name == p.Name {
+			p.ID = partners[i].ID
+		}
+	}
+
+	resource, err := db.Exec("delete from Resources where partner = ?",
+		p.ID)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(resource.RowsAffected())
+
+	for i := 0; i < len(p.Resources); i++ {
+		vector, _ := db.Exec("insert into Resources(partner, info) values(?, ?)",
+			p.ID, p.Resources[i])
+		fmt.Println(vector.RowsAffected())
+	}
+	http.Redirect(writer, request, "../teacherPartners", 307)
+}
+
 /*
 func (e *PartnerInfo) createEvent(writer http.ResponseWriter, request *http.Request) {
 	err := request.ParseForm()

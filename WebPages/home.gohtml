@@ -46,7 +46,7 @@
 
   let input = document.getElementById('searchbar').value
   input=input.toLowerCase();
-  let x = document.getElementsByClassName('Event');
+  let x = document.getElementsByClassName('grid-item');
 
   for (i = 0; i < x.length; i++) {
       if (!x[i].id.toLowerCase().includes(input)) {
@@ -66,7 +66,7 @@
     </div>
     <div class = "grid-container" style = "display:grid; grid-template-columns: repeat(2, 1fr); column-gap: 0.25%; row-gap: 1.5%; grid-auto-columns: auto auto auto ; grid-auto-flow: row">
         {{range $index, $val := .}}
-        <div class = "grid-item" style = "grid-row: auto">
+        <div class = "grid-item" id ="item{{.Name}}" style = "grid-row: auto">
             <article class = "small" class = "Partner" id="{{.Name}}" name="{{.Name}}">
                 <img id = "{{.Name}}img" class="responsive tiny" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F392%2F153%2Foriginal%2Fmodern-company-logo-design-vector.jpg&f=1&nofb=1&ipt=6167019925c3f057feacb64617ee3553359696e0914bfe67a786c84b37f0f5f8&ipo=images">
 

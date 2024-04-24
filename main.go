@@ -47,6 +47,7 @@ func main() {
 	http.HandleFunc("/create", partnerInfo.POSTHandler)
 	http.HandleFunc("/create/submit", partnerInfo.valHandler)
 	http.HandleFunc("/create/remove", partnerInfo.removeHandler)
+	http.HandleFunc("/create/update", partnerInfo.updateHandler)
 	http.HandleFunc("/home", partnerInfo.GETHandler)
 
 	/*
